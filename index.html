@@ -4,7 +4,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+    <link rel="icon" href="assets/images/enhance-favicon.ico">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -403,17 +403,17 @@
     <script>
       //Globals Values cedentials ,apiUrl etc
        //DEV
-        const apiUrl = 'http://localhost:56655';
-        const username = 'EDEEventAPIUser';
-        const password = 'ede3^3nt@piu$3r';
-        const basicAuth = 'Basic ' + btoa(username + ':' + password);
-        const partnerCode="ESTRELLA";
-        //UAT
-        // const apiUrl = 'https://edeappuat.jet-insure.com';
+        // const apiUrl = 'http://localhost:56655';
         // const username = 'EDEEventAPIUser';
         // const password = 'ede3^3nt@piu$3r';
         // const basicAuth = 'Basic ' + btoa(username + ':' + password);
-        // const partnerCode="ENHANCE";
+        // const partnerCode="ESTRELLA";
+        //UAT
+        const apiUrl = 'https://edeappuat.jet-insure.com';
+        const username = 'EDEEventAPIUser';
+        const password = 'ede3^3nt@piu$3r';
+        const basicAuth = 'Basic ' + btoa(username + ':' + password);
+        const partnerCode="ENHANCE";
       document.getElementById('add-age-field').addEventListener('click', function(event) {
         var inputGroup = $('#ageInput').clone(true);
 
