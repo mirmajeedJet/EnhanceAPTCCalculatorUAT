@@ -348,7 +348,7 @@
                   <div class="form-group row">
                     <label for="household" class="col-sm-4 col-form-label">Household Income</label>
                     <div class="col-sm-8">
-                      <input type="number" class="form-control" id="income">
+                      <input type="text" class="form-control" id="income">
                     </div>
                   </div>
                   <div class="form-group row justify-content-center">
@@ -362,7 +362,7 @@
                   <div class="form-group row">
                     <label for="staticEmail" class="col-sm-4 col-form-label">Email Address</label>
                     <div class="col-sm-8">
-                      <input type="email" class="form-control" id="staticEmail">
+                      <input type="email" class="form-control" id="staticEmail" >
                     </div>
                   </div>
                   <div class="mt-2">
@@ -461,6 +461,38 @@
        inputGroup.insertAfter(lastElement);
 
     });
+    document.getElementById('income').addEventListener('input', function() { 
+      formatInput(this);
+    });
+    function formatInput(inputField) {
+    // Get the input value and remove non-numeric characters
+    var inputValue = inputField.value.replace(/[^0-9.]/g, '');
+    var sanitizedValue = inputValue.replace(/,/g, '');
+    var numericValue = parseFloat(sanitizedValue);
+
+    // Check if the input is a valid number
+    if (isNaN(numericValue)) {
+        // Clear the input if it's not a valid number
+        inputField.value = '';
+        return;
+    }
+    var formattedValue = numericValue.toLocaleString(undefined, { maximumFractionDigits: 2 });
+    if (/^-?\d*\.\d{1}$/.test(sanitizedValue)){
+       formattedValue = numericValue.toLocaleString(undefined, {minimumFractionDigits: 1, maximumFractionDigits: 2 });
+    }
+    // Format the numeric value with a thousand separator
+    
+    if( /^-?\d*\.$/.test(sanitizedValue)){
+      formattedValue=formattedValue+".";
+    };
+    // Set the formatted value back to the input field
+    inputField.value = formattedValue;
+  }
+
+    // Optional: You can use this function to remove formatting when submitting the form
+    function removeFormatting(inputField) {
+        return inputField.replace(/,/g, '');
+    }
     $(document).on('click', '.remove-age-field', function(event) {
       $(this).closest('#ageInput').remove();
     });
@@ -540,11 +572,12 @@
         const income = document.getElementById('income').value;
         const state = document.getElementById('state').value;
         const county = document.getElementById('county').value;
+         
         // Construct the data object for the API request
         const data = {
           "Household": {
             "people": ages.map((age,index) => ({ "dob": age, applicant_type : index==0? "Subscriber":"Dependent" })), // Assuming gender is not collected
-            "income":income==""?0:income ,
+            "income":income==""?0:removeFormatting(income) ,
             "householdsize":Number( householdSize)
           },
           "Place": {
@@ -578,7 +611,8 @@
                 quoteData.Household.estimates.push(data.estimates[0]);
                 sessionStorage.setItem('quoteData',JSON.stringify(quoteData));
              }
-              document.getElementById('estimatedAPTC').innerText='$'+aptc;
+             var formattedAptc=aptc.toLocaleString(undefined, { maximumFractionDigits: 2 });
+              document.getElementById('estimatedAPTC').innerText='$'+formattedAptc;
                 $('.subsidy-form').hide();
                 $('.subsidy-amount').removeClass('d-none');
 
