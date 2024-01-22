@@ -1,428 +1,455 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="icon" href="assets/images/enhance-favicon.ico">
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>Enhance Health</title>
-    <style>
-      body{
-        background-color: #e3e3e3;
-      }
-      .top-section{
-        background-color: #211f4e;
-        color: white;
-        min-height: 420px;
-        position: relative;
-      }
-      .top-section::before{
-        position: absolute;
-        content: "";
-        width: 300px;
-        height: 300px;
-        background: #8890b4;
-        bottom: 0;
-        right: 0;
-        border-top-left-radius: 100px;
-        border-top-right-radius: 280px;
-        border-bottom-left-radius: 160px;
-      }
-      .top-section header .navbar-collapse{
-        flex-basis: auto;
-        flex-grow: unset;
-      }
-      .top-section header .dropdown-toggle::after{
-        color: #e98374;
-      }
-      .btn-outline-primary{
-        color: #e98374;
-        border-color: #e98374;
-        outline: none !important;
-        box-shadow: unset !important;
-      }
-      .btn-outline-primary:hover {
-        color: #fff;
-        background-color: #e98374;
-        border-color: #e98374;
-      }
-      .top-section header li.nav-item {
-        padding: 0px 7px;
-      }
-      .intro-sec{
-        min-height: 380px;
-      }
-      .intro-sec h1{
-        font-size: 70px;
-      }
-      .info-text h2{
-        font-size: 50px;
-        font-weight: bold;
-        color: #211f4e;
-      }
-      .btn-primary{
-        color: #211f4e;
-        background-color: #e98374;
-        border-color: #e98374;
-        outline: none !important;
-        box-shadow: unset !important;
-        font-weight: 500;
-      }
-      .btn-primary:hover , .btn-primary:focus , .btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show>.btn-primary.dropdown-toggle{
-        color: white;
-        background-color: #e98374;
-        border-color: #e98374;
-      }
-      @media (min-width: 1200px){
-        .form-box-main{
-          margin-top: -300px;
-          max-width: 500px;
-          min-width: 500px;
-        }
-        .container-fluid{
-          padding-left: 45px;
-          padding-right: 45px;
-        }
-      }
-      .form-box-head {
-          background: #e98374;
-          color: white;
-          text-align: center;
-          padding: 8px;
-          border-radius: 5px;
-          transform: translateY(4px);
-        }
-        .form-box-body{
-          background: white;
-        }
-        .icon-button{
-          outline: none;
-          border: 0;
-          width: 25px;
-          min-width: 25px;
-          height: 25px;
-          border-radius: 50%;
-          background: #8990b3;
-          color: white;
-          font-size: 13px;
-        }
-        .text-sm{
-          font-size: 12px;
-          margin-bottom: 0 !important;
-        }
-        .form-box-body .col-form-label{
-          font-size: 12px;
-          font-weight: 500;
-          opacity: 0.75;
-        }
-        .input-group .input-group-text{
-          background: transparent;
-          border-left: 0;
-          border-top-right-radius: 5px !important;
-          border-bottom-right-radius: 5px !important;
-          padding: 0.375rem 2px;
-          font-size: 13px;
-        }
-        .input-group input.form-control{
-          border-right: 0 ;
-        }
-        .autocomplete-box{
-          width: 100%;
-          margin-top: -2px;
-          border-top-left-radius: 0;
-          border-top-right-radius: 0;
-          box-shadow: 0px 2px 5px 1px #0003;
-        }
-        .autocomplete-box .has-no-result{
-          display: block;
-          width: 100%;
-          padding: 5px;
-          border-bottom: 1px solid #ccc;
-        }
-        .autocomplete-box .dropdown-item{
-          border-bottom: 1px solid #e0e0e0;
-        }
-        .autocomplete-box .dropdown-item:last-child{
-          border-bottom: 0 !important;
-        }
-        .amount-show-div{
-          display: flex;
-          min-height: 280px;
-          align-items: center;
-          flex-direction: column;
-          justify-content: center;
-        }
-        .inner-loader-main{
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          top: 50%;
-          left: 50%;
-          background: rgb(0 0 0 / 32%);
-          transform: translate(-50%, -50%);
-        }
-        .loader {
-          width: 48px;
-          height: 48px;
-          background: #fff;
-          border-radius: 50%;
-          position: relative;
-          animation: skLinRotate 1s ease-in-out infinite alternate;
-          position: absolute;
-          top: 40%;
-          left: 50%;
-        }
-      .loader:after{
-        content:"";
-        position: absolute;
-        inset: 5px;
-        border-radius: 50%;
-        border: 5px solid transparent;
-        border-top-color: #ff3d00;
-      }
-      @keyframes skLinRotate {
-        95% ,100% { transform: rotate(840deg) }
-      }
-      .form-box-body{
-        position: relative;
-      }
-      .age-div .input-group {
-        margin-top: 1rem !important;
-      }
-      .age-div .input-group:first-child{
-        margin-top: 0 !important;
-      }
-      .remove-age-field{
-        background: #f55353;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      #add-age-field , .remove-age-field{
-        margin-top: 5px;
-      }
-      .form-control{
-        font-size: 14px;
-      }
-  </style>
-  </head>
-  <body>
-    <section  class="top-section">
-        <div class="container-fluid">
-            <header>
-                <nav class="navbar navbar-expand-lg row justify-content-between">
-                    <a class="navbar-brand" href="#">
-                      <img src="assets/images/enhance-logo-white.png">
-                    </a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                      <i class="fa fa-bars text-light" aria-hidden="true"></i>
-                    </button>
-                  
-                    <div class="collapse navbar-collapse " id="navbarSupportedContent">
-                      <ul class="navbar-nav mr-auto">
-                        <li class="nav-item dropdown">
-                          <a class="nav-link dropdown-toggle text-light" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
-                            Explore Enhace Health
-                          </a>
-                          <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                          </div>
-                        </li>
-                        <li class="nav-item dropdown">
-                          <a class="nav-link dropdown-toggle text-light" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
-                            What We Offer
-                          </a>
-                          <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                          </div>
-                        </li>
-                        <li class="nav-item active">
-                          <a class="nav-link text-light" href="#">Reviews <span class="sr-only">(current)</span></a>
-                        </li>
-                        <li class="nav-item">
-                          <a class="nav-link text-light" href="#">Contact</a>
-                        </li>
-                        <li class="nav-item">
-                          <button type="button" class="btn btn-outline-primary">1-844-9494-3</button>
-                        </li>
-                      </ul>
-                    </div>
-                  </nav>
-            </header>
-            <div class="intro-sec row align-items-center">
-              <div class="col-lg-5">
-                <h1 class="text-white">
-                  Healthcare done differently.
-                </h1>
-                <button type="button" class="btn btn-primary mt-3">
-                  Find the right health coverage
-                </button>
-              </div>
-            </div>
-        </div>
-    </section>
-    <section class="body-formsection py-4">
-      <div class="container-fluid">
-        <div class="row justify-content-between">
-          <div class="col-lg-4 order-lg-last form-box-main">
-            <div class="form-box">
-              <div class="form-box-head">
-                <h3 class="mb-0" id="mainHeading">
-                  Calculate your subsidy
-                </h3>
-              </div>
-              <div class="form-box-body py-3 px-3">
-                <form class="subsidy-form">
-                  <div class="form-group row mb-4">
-                    <label for="countyzip" class="col-sm-4 col-form-label">County And ZIP Code</label>
-                    <div class="col-sm-8">
-                      <div class="dropdown ">
-                        <input type="text" class="jAuto form-control" id="countyzip" placeholder="Please enter zip code" autocomplete="off">
-                        <input id="fipsCode" hidden>
-                        <input id="zipCodeValue" hidden>
-                        <input id="state" hidden>
-                        <input id="county" hidden>
-                        <div class="dropdown-menu autocomplete-box"  id="autocomplete-list">
-                       
-                           <div class="list-autocomplete" id="list-autocomplete">
-                         
-                          </div> 
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="form-group row age-group" id="ageInput">
-                    <label for="age" class="col-sm-4 col-form-label">Your Age</label>
-                    <div class="col-sm-3" id="age-div">
-                      <div class="input-group mb-2 mr-sm-2 ">
-                        <input type="text" class="form-control age" id="age"  placeholder="Age" maxlength="2">
-                        <div class="input-group-prepend">
-                          <div class="input-group-text">Years</div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-sm-1 addBtn">
-                        <button class="icon-button mr-2" id="add-age-field" type="button">
-                          <i class="fa fa-plus" aria-hidden="true"></i>
-                        </button>
-                      </div>
-                        <div class="col-sm-4 ageText">
-                        <p class="text-sm">
-                          Add ages of other family members to be insured.
-                        </p>
-                        </div>
+   <!-- Required meta tags -->
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+   <link rel="icon" href="assets/images/enhance-favicon.ico">
+   <!-- Bootstrap CSS -->
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+   <title>Enhance Health</title>
+   <style>
+     body{
+       background-color: #e3e3e3;
+     }
+     .top-section{
+       background-color: #211f4e;
+       color: white;
+       min-height: 420px;
+       position: relative;
+     }
+     .top-section::before{
+       position: absolute;
+       content: "";
+       width: 300px;
+       height: 300px;
+       background: #8890b4;
+       bottom: 0;
+       right: 0;
+       border-top-left-radius: 100px;
+       border-top-right-radius: 280px;
+       border-bottom-left-radius: 160px;
+     }
+     .top-section header .navbar-collapse{
+       flex-basis: auto;
+       flex-grow: unset;
+     }
+     .top-section header .dropdown-toggle::after{
+       color: #e98374;
+     }
+     .btn-outline-primary{
+       color: #e98374;
+       border-color: #e98374;
+       outline: none !important;
+       box-shadow: unset !important;
+     }
+     .btn-outline-primary:hover {
+       color: #fff;
+       background-color: #e98374;
+       border-color: #e98374;
+     }
+     .top-section header li.nav-item {
+       padding: 0px 7px;
+     }
+     .intro-sec{
+       min-height: 380px;
+     }
+     .intro-sec h1{
+       font-size: 70px;
+     }
+     .info-text h2{
+       font-size: 50px;
+       font-weight: bold;
+       color: #211f4e;
+     }
+     .btn-primary{
+       color: white;
+       background-color: #e98374;
+       border-color: #e98374;
+       outline: none !important;
+       box-shadow: unset !important;
+       font-weight: 500;
+     }
+     .btn-primary:hover , .btn-primary:focus , .btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show>.btn-primary.dropdown-toggle{
+       color: white;
+       background-color: #e98374;
+       border-color: #e98374;
+     }
+     .form-box .btn-primary{
+       color: white !important;
+     }
+     @media (min-width: 1200px){
+       .form-box-main{
+         margin-top: -300px;
+         max-width: 497px;
+       }
+       .container-fluid{
+         padding-left: 45px;
+         padding-right: 45px;
+       }
+     }
+     .form-box-head {
+         background: #e98374;
+         color: white;
+         text-align: center;
+         padding: 8px;
+         border-radius: 5px;
+         border-bottom-left-radius: 0;
+         border-bottom-right-radius: 0;
+       }
+       .form-box-body{
+         background: white;
+       }
+       .icon-button{
+         outline: none;
+         border: 0;
+         width: 25px;
+         min-width: 25px;
+         height: 25px;
+         border-radius: 50%;
+         background: #8990b3;
+         color: white;
+         font-size: 13px;
+       }
+       .text-sm{
+         font-size: 12px !important;
+         margin-bottom: 0 !important;
+       }
+       .form-box-body .col-form-label{
+         font-size: 12px;
+         font-weight: 500;
+         opacity: 0.75;
+         text-transform: uppercase;
+       }
+       label.col-sm-4.col-form-label {
+           padding-right: 7px !important;
+       }
+       .input-group .input-group-text{
+         background: transparent;
+         border-left: 0;
+         border-top-right-radius: 5px !important;
+         border-bottom-right-radius: 5px !important;
+         padding: 0.375rem 2px;
+         font-size: 13px;
+         padding-right: 7px;
+       }
+       .input-group input.form-control{
+         border-right: 0 ;
+       }
+       .autocomplete-box{
+         width: 100%;
+         margin-top: -2px;
+         border-top-left-radius: 0;
+         border-top-right-radius: 0;
+         box-shadow: 0px 2px 5px 1px #0003;
+       }
+       .autocomplete-box .has-no-result{
+         display: block;
+         width: 100%;
+         padding: 5px;
+         border-bottom: 1px solid #ccc;
+       }
+       .autocomplete-box .dropdown-item{
+         border-bottom: 1px solid #e0e0e0;
+       }
+       .autocomplete-box .dropdown-item:last-child{
+         border-bottom: 0 !important;
+       }
+       .amount-show-div{
+         display: flex;
+         min-height: 280px;
+         align-items: center;
+         flex-direction: column;
+         justify-content: center;
+       }
+       .inner-loader-main{
+         position: absolute;
+         width: 100%;
+         height: 100%;
+         top: 50%;
+         left: 50%;
+         background: rgb(0 0 0 / 32%);
+         transform: translate(-50%, -50%);
+       }
+       .loader {
+         width: 48px;
+         height: 48px;
+         background: #fff;
+         border-radius: 50%;
+         position: relative;
+         animation: skLinRotate 1s ease-in-out infinite alternate;
+         position: absolute;
+         top: 40%;
+         left: 50%;
+       }
+     .loader:after{
+       content:"";
+       position: absolute;
+       inset: 5px;
+       border-radius: 50%;
+       border: 5px solid transparent;
+       border-top-color: #ff3d00;
+     }
+     @keyframes skLinRotate {
+       95% ,100% { transform: rotate(840deg) }
+     }
+     .form-box-body{
+       position: relative;
+     }
+     .age-div .input-group {
+       margin-top: 1rem !important;
+     }
+     .age-div .input-group:first-child{
+       margin-top: 0 !important;
+     }
+     .remove-age-field{
+       background: #f55353;
+       display: flex;
+       align-items: center;
+       justify-content: center;
+     }
+     #add-age-field , .remove-age-field{
+       margin-top: 5px;
+     }
+     .form-control{
+       font-size: 13px;
+     }
+     .form-control.age{
+       padding-left: 9px;
+       padding-right: 9px;
+     }
+     .age-div .input-group-prepend{
+       margin-right: 3px;
+     }
+     .MAGI{
+       padding-left: 55px;
+       flex-direction: column !important;
+     }
+     .MAGI > p{
+       font-size: 14px;
+       margin-bottom: 8px !important;
+     }
+ </style>
+ </head>
+ <body>
+   <section  class="top-section">
+       <div class="container-fluid">
+           <header>
+               <nav class="navbar navbar-expand-lg row justify-content-between">
+                   <a class="navbar-brand" href="#">
+                     <img src="assets/images/enhance-logo-white.png">
+                   </a>
+                   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                     <i class="fa fa-bars text-light" aria-hidden="true"></i>
+                   </button>
+                 
+                   <div class="collapse navbar-collapse " id="navbarSupportedContent">
+                     <ul class="navbar-nav mr-auto">
+                       <li class="nav-item dropdown">
+                         <a class="nav-link dropdown-toggle text-light" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+                           Explore Enhace Health
+                         </a>
+                         <div class="dropdown-menu">
+                           <a class="dropdown-item" href="#">Action</a>
+                           <a class="dropdown-item" href="#">Another action</a>
+                           <div class="dropdown-divider"></div>
+                           <a class="dropdown-item" href="#">Something else here</a>
+                         </div>
+                       </li>
+                       <li class="nav-item dropdown">
+                         <a class="nav-link dropdown-toggle text-light" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+                           What We Offer
+                         </a>
+                         <div class="dropdown-menu">
+                           <a class="dropdown-item" href="#">Action</a>
+                           <a class="dropdown-item" href="#">Another action</a>
+                           <div class="dropdown-divider"></div>
+                           <a class="dropdown-item" href="#">Something else here</a>
+                         </div>
+                       </li>
+                       <li class="nav-item active">
+                         <a class="nav-link text-light" href="#">Reviews <span class="sr-only">(current)</span></a>
+                       </li>
+                       <li class="nav-item">
+                         <a class="nav-link text-light" href="#">Contact</a>
+                       </li>
+                       <li class="nav-item">
+                         <button type="button" class="btn btn-outline-primary">1-844-9494-3</button>
+                       </li>
+                     </ul>
+                   </div>
+                 </nav>
+           </header>
+           <div class="intro-sec row align-items-center">
+             <div class="col-lg-5">
+               <h1 class="text-white">
+                 Healthcare done differently.
+               </h1>
+               <button type="button" class="btn btn-primary mt-3">
+                 Find the right health coverage
+               </button>
+             </div>
+           </div>
+       </div>
+   </section>
+   <section class="body-formsection py-4">
+     <div class="container-fluid">
+       <div class="row justify-content-between">
+         <div class="col-lg-5 order-lg-last form-box-main">
+           <div class="form-box">
+             <div class="form-box-head">
+               <h3 class="mb-0" id="mainHeading">
+                 Calculate your subsidy
+               </h3>
+             </div>
+             <div class="form-box-body py-3 px-3">
+               <form class="subsidy-form">
+                 <div class="form-group row mb-4">
+                   <label for="countyzip" class="col-sm-4 col-form-label">ZIP Code and County</label>
+                   <div class="col-sm-8">
+                     <div class="dropdown ">
+                       <input type="text" class="jAuto form-control" id="countyzip" placeholder="Please enter zip code" autocomplete="off">
+                       <input id="fipsCode" hidden>
+                       <input id="zipCodeValue" hidden>
+                       <input id="state" hidden>
+                       <input id="county" hidden>
+                       <div class="dropdown-menu autocomplete-box"  id="autocomplete-list">
                       
-                  </div>
-                  <div class="form-group row">
-                    <label for="householdSize" class="col-sm-4 col-form-label">Household Size</label>
-                    <div class="col-sm-4">
-                      <select id="householdSize" class="form-control">
-                        <option selected value="1">1 member</option>
-                        <option value="2">2 member</option>
-                        <option value="3">3 member</option>
-                        <option value="4">4 member</option>
-                        <option value="5">5 member</option>
-                        <option value="6">6 member</option>
-                        <option value="7">7 member</option>
-                        <option value="8">8 member</option>
-                        <option value="9">9 member</option>
-                        <option value="10">10 member</option>
-                      </select>
-                    </div>
-                    <div class="col-sm-4">
-                    
-                        <p class="text-sm">
-                          Include yourself, your spouse, and children claimed as dependents on your taxes.
-                        </p>
-                    </div>
-                  </div>
-                  <div class="form-group row">
-                    <label for="household" class="col-sm-4 col-form-label">Household Income</label>
-                    <div class="col-sm-8">
-                      <input type="text" class="form-control" id="income">
-                    </div>
-                  </div>
-                  <div class="form-group row justify-content-center">
-                    <p>
-                      Modified Adjusted Gross Income (<a href="#">MAGI</a>)
-                    </p>
-                    <p class="mt-2 text-sm">
-                      For most taxpayers, your MAGI is close to AGI (Line 11 of your Form 1040).
-                    </p>
-                  </div>
-                  <div class="form-group row">
-                    <label for="staticEmail" class="col-sm-4 col-form-label">Email Address</label>
-                    <div class="col-sm-8">
-                      <input type="email" class="form-control" id="staticEmail" >
-                    </div>
-                  </div>
-                  <div class="mt-2">
-                    <button type="button" onclick="submitForm()" id="submit-form" class="btn btn-primary submit-subs-btn mt-3 w-100">
-                      Submit
-                    </button>
-                  </div>
-                </form>
-                <div class="subsidy-amount d-none">
-                  <div class="amount-show-div" id="estimates">
-                    <small>
-                      Total subsidy
-                    </small>
-                    <h2 >
-                      <span id="estimatedAPTC" style="margin-right: -8px;">$0</span>
-                      <span style="font-size: 23px;">/</span>
-                      <span style="font-size: 20px;">per month</span>
-                    </h2>
-                    <small>
-                      Take a look at your premium and benefit options
-                    </small>
-                  </div>
-                  <div class="amount-show-div" id="noestimates">
-                    <h5>
-                      Unfortunately, you don't qualify for an Advance Premium Tax Credit (APTC) at this time.
-                    </h5>
-                  </div>
-                  <div>
-                    <button type="button" onclick="upsertQuote()" class="btn btn-primary mt-3 w-100">
-                      Find Plans
-                    </button>
-                  </div>
-                </div>
-                <!-- loader here -->
-                <div class="inner-loader-main d-none" id="loader">
-                  <span class="loader"></span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-6 order-lg-first">
-            <div class="info-text ">
-              <h2 class="mb-3">
-                Finding you the healthcare you need
-              </h2>
-              <p>
-                Enhance Health is an organization of health insurance experts that leverages digital technologies 
-                and a concierge experience to streamline the health insurance enrollment process.
-              </p>
-              <p>
-                The company simplifies what is too often a time-consuming, overwhelming and confusing process by 
-                connecting users with best-in-class health insurance and Medicare plans in only a few minutes. Founded in 
-                2021 through partnership with and funding from Bain Capital, Enhance Health employs more than 600 people with 
-                projections to continue growing rapidly.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+                          <div class="list-autocomplete" id="list-autocomplete">
+                        
+                         </div> 
+                       </div>
+                     </div>
+                   </div>
+                 </div>
+                 <div class="form-group row age-group " id="ageInput">
+                   <label for="age" class="col-sm-4 col-form-label">Your Age</label>
+                   <div class="col-sm-3" id="age-div">
+                     <div class="input-group mb-2 mr-sm-2 ">
+                       <input type="text" class="form-control age" id="age"  placeholder="Age" maxlength="2">
+                       <div class="input-group-prepend">
+                         <div class="input-group-text">years</div>
+                       </div>
+                     </div>
+                   </div>
+                   <div class="col-sm-1 addBtn">
+                       <button class="icon-button mr-2" id="add-age-field" type="button">
+                         <i class="fa fa-plus" aria-hidden="true"></i>
+                       </button>
+                     </div>
+                       <div class="col-sm-4 ageText">
+                       <p class="text-sm">
+                         Add ages of other family members to be insured.
+                       </p>
+                       </div>
+                     
+                 </div>
+                 <div class="form-group row">
+                   <label for="householdSize" class="col-sm-4 col-form-label">Household Size</label>
+                   <div class="col-sm-4">
+                     <select id="householdSize" class="form-control">
+                       <option selected value="1">1 member</option>
+                       <option value="2">2 member</option>
+                       <option value="3">3 member</option>
+                       <option value="4">4 member</option>
+                       <option value="5">5 member</option>
+                       <option value="6">6 member</option>
+                       <option value="7">7 member</option>
+                       <option value="8">8 member</option>
+                       <option value="9">9 member</option>
+                       <option value="10">10 member</option>
+                     </select>
+                   </div>
+                   <div class="col-sm-4">
+                   
+                       <p class="text-sm">
+                         Include yourself, your spouse, and children claimed as dependents on your taxes.
+                       </p>
+                   </div>
+                 </div>
+                 <div class="form-group row align-items-center">
+                   <label for="household" class="col-sm-4 col-form-label">Annual Household Income ($)</label>
+                   <div class="col-sm-8">
+                     <input type="text" class="form-control" id="income">
+                   </div>
+                 </div>
+                 <div class="form-group row MAGI">
+                   <p>
+                     Modified Adjusted Gross Income (<a href="#">MAGI</a>)
+                   </p>
+                   <p class="text-sm">
+                     For most taxpayers, your MAGI is close to AGI (Line 11 of your Form 1040)
+                   </p>
+                 </div>
+                 <div class="form-group row">
+                   <label for="staticEmail" class="col-sm-4 col-form-label">Email Address</label>
+                   <div class="col-sm-8">
+                     <input type="email" class="form-control" id="staticEmail">
+                   </div>
+                 </div>
+                 <div class="mt-2">
+                   <button type="button" onclick="submitForm()" id="submit-form" class="btn btn-primary submit-subs-btn mt-3 w-100">
+                     Submit
+                   </button>
+                 </div>
+               </form>
+               <div class="subsidy-amount d-none">
+                 <div class="amount-show-div" id="estimates">
+                   <small> Total estimated subsidy (APTC) </small>
+                   <small>
+                     - Advance Premium Text Credit
+                   </small>
+                   <br>
+                   <h2 >
+                     <span id="estimatedAPTC" >$0</span>
+                     <span style="font-size: 23px;">/</span>
+                     <span style="font-size: 20px;">per month</span>
+                   </h2>
+                   <br>
+                   <small>
+                     Take a look at your monthly premium 
+                   </small>
+                   <small>and benefit options</small>
+                 </div>
+                 <div class="amount-show-div" id="noestimates">
+                   <h5>
+                     Unfortunately, you don't qualify for an Advance Premium Tax Credit (APTC) at this time.
+                   </h5>
+                 </div>
+                 <div>
+                   <button type="button" onclick="upsertQuote()" class="btn btn-primary mt-3 w-100">
+                     Find Plans
+                   </button>
+                 </div>
+               </div>
+               <!-- loader here -->
+               <div class="inner-loader-main d-none" id="loader">
+                 <span class="loader"></span>
+               </div>
+             </div>
+           </div>
+         </div>
+         <div class="col-lg-6 order-lg-first">
+           <div class="info-text ">
+             <h2 class="mb-3">
+               Finding you the healthcare you need
+             </h2>
+             <p>
+               Enhance Health is an organization of health insurance experts that leverages digital technologies 
+               and a concierge experience to streamline the health insurance enrollment process.
+             </p>
+             <p>
+               The company simplifies what is too often a time-consuming, overwhelming and confusing process by 
+               connecting users with best-in-class health insurance and Medicare plans in only a few minutes. Founded in 
+               2021 through partnership with and funding from Bain Capital, Enhance Health employs more than 600 people with 
+               projections to continue growing rapidly.
+             </p>
+           </div>
+         </div>
+       </div>
+     </div>
+   </section>
 
    
     <!-- Dependencies -->
@@ -459,8 +486,22 @@
         const ageInputs = document.querySelectorAll('.age-group');
         const lastElement =  ageInputs[ageInputs.length - 1];
        inputGroup.insertAfter(lastElement);
-
+       //set house size vaue against added age count
+       rotateHouseHoldSize();
     });
+    function rotateHouseHoldSize(){
+      const ageInputs = document.querySelectorAll('.age-group');
+      if(ageInputs){
+        var selectElement = document.getElementById("householdSize");
+
+        for (var i = 0; i < selectElement.options.length; i++) {
+          if (selectElement.options[i].value == ageInputs.length) {
+            selectElement.selectedIndex = i;
+            break;
+          }
+        }
+      }
+    }
     document.getElementById('income').addEventListener('input', function() { 
       formatInput(this);
     });
@@ -495,6 +536,8 @@
     }
     $(document).on('click', '.remove-age-field', function(event) {
       $(this).closest('#ageInput').remove();
+      //rotate house hold size value 
+      rotateHouseHoldSize();
     });
       document.getElementById('countyzip').addEventListener('input', function(event) {
         const value = event.target.value.trim();
