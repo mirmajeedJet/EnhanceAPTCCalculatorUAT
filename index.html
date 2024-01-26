@@ -490,7 +490,7 @@
 <!-- Bootstrap 4 Autocomplete -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-4-autocomplete/dist/bootstrap-4-autocomplete.min.js" crossorigin="anonymous"></script>
     <script>
-      //Globals Values cedentials ,apiUrl etc
+      //Globals Values Auth cedentials ,apiUrl etc..
        //DEV
         // const apiUrl = 'http://localhost:56655';
         // const username = 'EDEEventAPIUser';
@@ -502,7 +502,7 @@
         const username = 'EDEEventAPIUser';
         const password = 'ede3^3nt@piu$3r';
         const basicAuth = 'Basic ' + btoa(username + ':' + password);
-        const partnerCode="ENHANCE";
+        const partnerCode="ENHANCE"; //partner code is a must 
 
         // Creating an "enum" using an object for screen type
     const ScreenType = {
@@ -518,6 +518,8 @@
        //set house size vaue against added age count
        rotateHouseHoldSize();
     });
+    //create dynamiclly age input field with text and cross button  
+    //if value exist for the input then prepopulate it 
     function insertAgeInput(val=''){
       var inputGroup = $('#ageInput').clone(true);
 
@@ -528,7 +530,7 @@
 
       // Clear the value of the cloned input field
       inputGroup.find('.age').val('');
-      //insert of value into field case of back navigation
+      //insert of value into field in case of back navigation
       if(val){
         inputGroup.find('.age').val(val);
       }
@@ -538,11 +540,12 @@
       const lastElement =  ageInputs[ageInputs.length - 1];
       inputGroup.insertAfter(lastElement);
     }
+    //when new age/dob input added select the hosuehold size respectivily against input length
     function rotateHouseHoldSize(){
       const ageInputs = document.querySelectorAll('.age-group');
       if(ageInputs){
         var selectElement = document.getElementById("householdSize");
-
+        //select the value from household size dropdown
         for (var i = 0; i < selectElement.options.length; i++) {
           if (selectElement.options[i].value == ageInputs.length) {
             selectElement.selectedIndex = i;
@@ -551,9 +554,11 @@
         }
       }
     }
+    //event to format the income input value with  thousand saparator
     document.getElementById('income').addEventListener('input', function(event) { 
       document.getElementById('income').value = formatInput(event.target.value);
     });
+    //thousand separator formator
     function formatInput(value) {
     // Get the input value and remove non-numeric characters
     var inputValue = value.replace(/[^0-9.]/g, '');
@@ -579,15 +584,17 @@
     return formattedValue;
   }
 
-    // Optional: You can use this function to remove formatting when submitting the form
+    // remove thousand separator format function
     function removeFormatting(inputField) {
         return inputField.replace(/,/g, '');
     }
+    //age remove button event
     $(document).on('click', '.remove-age-field', function(event) {
       $(this).closest('#ageInput').remove();
       //rotate house hold size value 
       rotateHouseHoldSize();
     });
+    //Zip code look up event
       document.getElementById('countyzip').addEventListener('input', function(event) {
         const value = event.target.value.trim();
         const minLengthTerm = 4; // Example: Minimum length of 5 characters
@@ -597,7 +604,7 @@
           return;
         }
 
-        // Make an AJAX request to your WordPress API
+        // Make an AJAX request to your WordPress API//get the county informatin against a zip code
         fetch(apiUrl + '/api/ExternalEnhancement/GetCountyListByZipCode?zipcode=' + value,{
           headers: {
               'Authorization': basicAuth,
@@ -614,19 +621,25 @@
               const autocomplete = document.getElementById('autocomplete-list');
               const autocompleteList = document.getElementById('list-autocomplete');
               
-            if (data != null && data.length > 0) {
+            if (data?.length > 0) {
               autocompleteList.innerHTML = ''; // Clear previous suggestions
+               //creating option list for zip code response look up/ create auto complete list
               data.forEach(item => {
+               
                 const option = document.createElement('button');
                 option.type="button";
                 option.classList.add("dropdown-item");
                 option.textContent = item.countyName+", "+item.state+" " +item.zipCode;; // Adjust based on your data structure
+                //click event on lookup list each option 
                 option.addEventListener('click', function() {
-                  document.getElementById('countyzip').value =item.countyName+", "+item.state+" " +item.zipCode; // Set selected value to input
+                
+                  document.getElementById('countyzip').value =item.countyName+", "+item.state+" " +item.zipCode; // set the selected option value in the zip code input
+                   //hidden inputs to store data and used them when submit the form 
                   document.getElementById('fipsCode').value=item.countyFips;
                   document.getElementById('zipCodeValue').value=item.zipCode;
                   document.getElementById('state').value=item.state;
                   document.getElementById('county').value=item.countyName;
+
                   autocompleteList.innerHTML = ''; // Clear suggestions on selection
                   autocomplete.style.display = 'none'; // Hide autocomplete list
                    
@@ -634,7 +647,7 @@
                 autocompleteList.appendChild(option);
               });
               autocomplete.classList.add('show');
-             autocomplete.style.display = 'block'; // Show autocomplete list
+              autocomplete.style.display = 'block'; // Show autocomplete list
             } else {
               autocompleteList.innerHTML = '';
               autocomplete.style.display = 'none';
@@ -647,6 +660,7 @@
             console.error('Error fetching data:', error);
           });
       });
+      //show / hide loader 
       function showHideLoader(visible){
         var loader=document.getElementById('loader');
        if(visible){
@@ -655,6 +669,7 @@
         loader.classList.add('d-none');
        }
       }
+      //submit form and get the estimated subsidy
       function submitForm() {
       
         const zipcode = document.getElementById('zipCodeValue').value;
@@ -668,7 +683,7 @@
         // Construct the data object for the API request
         const data = {
           "Household": {
-            "people": ages.map((age,index) => ({ "dob": age, applicant_type : index==0? "Subscriber":"Dependent" })), // Assuming gender is not collected
+            "people": ages.map((age,index) => ({ "dob": age, applicant_type : index==0? "Subscriber":"Dependent" })), // Assuming applicant_type is not collected
             "income":income==""?0:removeFormatting(income) ,
             "householdsize":Number( householdSize)
           },
@@ -682,6 +697,7 @@
         };
         sessionStorage.setItem('quoteData',JSON.stringify(data));
         this.showHideLoader(true);
+
         fetch(apiUrl + '/api/ExternalEnhancement/GetEstimatedAPTC',{
           method:"POST",
           headers: {
@@ -696,7 +712,10 @@
             if(data.error){
               alert(data.error);
             }else{
+              //aptc response will be the list of every individual 
+              //every individual object has total aptc  field
              var aptc=parseFloat(data.estimates[0].aptc);
+             //saving data in the session for subsidy or no subsidy screen 
              var quoteData=JSON.parse(sessionStorage.getItem('quoteData'));
              if(quoteData){
                 quoteData.Household.estimates=[];
@@ -705,20 +724,24 @@
              }
              var formattedAptc=aptc.toLocaleString(undefined, { maximumFractionDigits: 2 });
               document.getElementById('estimatedAPTC').innerText='$'+formattedAptc;
+               //hide the form and visible the aptc/subsidy screen where we show subsidy amount or no subsidy text
                 $('.subsidy-form').hide();
                 $('.subsidy-amount').removeClass('d-none');
-               
+               //here we are showing subsidy screen to show some value which is grater then 0 value 
                 document.getElementById('mainHeading').innerText='Here is your estimated subsidy';
                 document.getElementById('noestimates').style.display='none';
                 document.getElementById('estimates').style.display='flex';
+                //maintaing the screen type for back navigation and refresh page  
                 sessionStorage.setItem('prevScreenType',ScreenType.Form);
                 sessionStorage.setItem('currentScreenType',ScreenType.Subsidy);
-              if(Number(aptc)==0){
-                document.getElementById('mainHeading').innerText='Not eligible for subsidy';
-                document.getElementById('noestimates').style.display='flex';
-                document.getElementById('estimates').style.display='none';
-                sessionStorage.setItem('currentScreenType',ScreenType.NoSubsidy);
-              }
+                //here we are showing No subsidy screen to show for 0 value 
+                //when no subsidy given to applicant 
+                if(Number(aptc)==0){
+                  document.getElementById('mainHeading').innerText='Not eligible for subsidy';
+                  document.getElementById('noestimates').style.display='flex';
+                  document.getElementById('estimates').style.display='none';
+                  sessionStorage.setItem('currentScreenType',ScreenType.NoSubsidy);
+                }
               
             }
           }) .catch(error => {
@@ -727,8 +750,8 @@
       alert('Error:'+ error);
           });
       }
-      //upsert Quote / redirect to Jet plan screen
-      function upsertQuote() {
+      //saving Quote information to jet and  redirecting to Jet plan screen
+    function upsertQuote() {
         this.showHideLoader(true);
       fetch(apiUrl + '/api/ExternalEnhancement/UpsertQuote',{
         method:"POST",
@@ -745,8 +768,10 @@
             this.showHideLoader(false);
             alert(data.error);
           }else{
+            //clear the quote information from session and rediret to jet plan screen
+            //redirection url will be provided by api according to the enviroment UAT/PROD
             sessionStorage.clear();
-           window.location.href=data.redirectUri;
+            window.location.href=data.redirectUri;
           }
         }) .catch(error => {
           this.showHideLoader(false);
@@ -754,10 +779,12 @@
        alert('Error:'+ error);
         });
     }
+    //pre populated the current visible screen data against current screen type save in the session
     function populateData(screenType){
       var data=  JSON.parse(sessionStorage.getItem('quoteData'));
       var prevScreenType=ScreenType.Form;
       var currentScreenType=ScreenType.Form;
+      ///pre-population for subsidy form / First Screen
       if(data && screenType==ScreenType.Form){
        //set values to hidden input fields
         document.getElementById('zipCodeValue').value =data.Place.zipcode;
@@ -768,8 +795,12 @@
         document.getElementById('countyzip').value =data.Place.county+", "+data.Place.state+" " +data.Place.zipcode;
         document.getElementById('householdSize').value=data.Household.householdsize;
         document.getElementById('income').value=formatInput(data.Household.income);
+
+        //pre population and generation age input against dob/age storeed in quote session object
         const ages = data.Household.people;
         ages?.forEach((value,index)=>{
+          //if applicant type is subsriber then pre populate the first input and remove other input if exist 
+          //and later on we will create new inputs for other dependants
          if(value.applicant_type =="Subscriber"){
           var subscriberGroup = document.querySelectorAll('#ageInput');
            for (var i = 0; i < subscriberGroup.length; i++) {
@@ -779,8 +810,9 @@
                 subscriberGroup[i].remove();
               }            
            }
-            
-          }else{
+          }
+           //creating new inputs for other dependants
+          else{
             insertAgeInput(value.dob);
           }
         });
@@ -788,7 +820,9 @@
         document.getElementById('noestimates').style.display='none';
         document.getElementById('estimates').style.display='flex';
         document.getElementById('subsidy-amounts').classList.add('d-none');
-      }else if (screenType==ScreenType.Subsidy){
+      }
+        ///pre-population for Subsidy value / 2nd Screen
+      else if (screenType==ScreenType.Subsidy){
           $('.subsidy-form').hide();
           var formattedAptc=data?.Household?.estimates[0].aptc?.toLocaleString(undefined, { maximumFractionDigits: 2 });
           document.getElementById('estimatedAPTC').innerText='$'+formattedAptc;
@@ -798,7 +832,9 @@
           $('.subsidy-amount').removeClass('d-none');
          prevScreenType=ScreenType.Form;
          currentScreenType=ScreenType.Subsidy;
-      }else if(screenType==ScreenType.NoSubsidy){
+      }
+       ///pre-population for No Subsidy value / 3nd Screen
+      else if(screenType==ScreenType.NoSubsidy){
           $('.subsidy-form').hide();
          
           document.getElementById('mainHeading').innerText='Not eligible for subsidy';
@@ -808,9 +844,11 @@
           prevScreenType=ScreenType.Form;
           currentScreenType=ScreenType.NoSubsidy;
       }
+      //save the current and preve screen in the session so we can prepopulated for refresh or back navigation case
       sessionStorage.setItem('prevScreenType',prevScreenType);
       sessionStorage.setItem('currentScreenType',currentScreenType);
     }
+    //back navigation button sent the prev screen type ,so we can populate that screen data 
     function back(){
       populateData(sessionStorage.getItem('prevScreenType'))
     }
