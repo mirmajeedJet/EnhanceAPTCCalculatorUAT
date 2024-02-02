@@ -252,6 +252,27 @@
        .no-plans{
          min-height: 220px;
       } 
+      .error-bar {
+        background-color: #f8d7da;
+        border: 1px solid #f5c6cb;
+        color: #721c24;
+        padding: 0px;
+        margin-bottom: 0px;
+        border-radius: 5px;
+        font-size: 12px;
+        font-weight: 500;
+        opacity: 0; /* Initially set opacity to 0 */
+        max-height: 0; /* Initially set max-height to 0 */
+        overflow: hidden; /* Hide overflow content */
+        transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        
+    }
+    .error-bar.show {
+      opacity: 1;
+      padding: 10px;
+      margin-bottom: 20px;
+      max-height: 1000px;
+    }
   </style>
   </head>
   <body>
@@ -326,6 +347,8 @@
                 </h3>
               </div>
               <div class="form-box-body py-3 px-3">
+                <div class="error-bar" id="errorMsg">
+                </div>
                 <form class="subsidy-form">
                   <div class="form-group row mb-4">
                     <label for="countyzip" class="col-sm-4 col-form-label">ZIP Code and County</label>
@@ -398,17 +421,11 @@
                   </div>
                   <div class="form-group row MAGI">
                     <p>
-                      Modified Adjusted Gross Income (<a href="#">MAGI</a>)
+                      Modified Adjusted Gross Income (<a href="https://www.healthcare.gov/glossary/modified-adjusted-gross-income-magi" target="_blank">MAGI</a>)
                     </p>
                     <p class="text-sm">
                       For most taxpayers, your MAGI is close to AGI (Line 11 of your Form 1040)
                     </p>
-                  </div>
-                  <div class="form-group row">
-                    <label for="staticEmail" class="col-sm-4 col-form-label">Email Address</label>
-                    <div class="col-sm-8">
-                      <input type="email" class="form-control" id="staticEmail">
-                    </div>
                   </div>
                   <div class="mt-2">
                     <button type="button" onclick="submitForm()" id="submit-form" class="btn btn-primary submit-subs-btn mt-3 w-100">
@@ -491,25 +508,38 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-4-autocomplete/dist/bootstrap-4-autocomplete.min.js" crossorigin="anonymous"></script>
     <script>
       //Globals Values Auth cedentials ,apiUrl etc..
-       //DEV
-        // const apiUrl = 'http://localhost:56655';
-        // const username = 'EDEEventAPIUser';
-        // const password = 'ede3^3nt@piu$3r';
-        // const basicAuth = 'Basic ' + btoa(username + ':' + password);
-        // const partnerCode="ESTRELLA";
-        //UAT
+    //DEV
+      //  const apiUrl = 'http://localhost:56655';
+      //   const username = 'EDEEventAPIUser';
+      //   const password = 'ede3^3nt@piu$3r';
+      //   const basicAuth = 'Basic ' + btoa(username + ':' + password);
+      //   const partnerCode="ESTRELLA";
+      //UAT
         const apiUrl = 'https://edeappuat.jet-insure.com';
         const username = 'EDEEventAPIUser';
         const password = 'ede3^3nt@piu$3r';
         const basicAuth = 'Basic ' + btoa(username + ':' + password);
-        const partnerCode="ENHANCE"; //partner code is a must 
-
+        const partnerCode="ENHANCE"; //partner code is a must  
+        //PROD
+        // const apiUrl = 'https://edeapp.jet-insure.com';
+        // const username = 'EDEEventAPIUser';
+        // const password = 'ede3^3nt@piu$3r';
+        // const basicAuth = 'Basic ' + btoa(username + ':' + password);
+        // const partnerCode="ENHANCE"; //partner code is a must 
+      
         // Creating an "enum" using an object for screen type
     const ScreenType = {
         Form: 1,
         Subsidy: 2,
         NoSubsidy: 3
     };
+    const errorType={
+      inValidZipCode: 'Please enter a valid zip code.',
+      inValidZipCodeLength: 'ZIP Code must be 5 characters long.',
+      invalidIncomeAmount:'Please enter amount greater than 0.',
+      invalidIncomeLength:'Income should not greater than 8 dights.',
+      invalidZipCodeCounty:'Please select a county.'
+    }
     document.addEventListener('DOMContentLoaded', function() {
        populateData(sessionStorage.getItem('currentScreenType'));
     });
@@ -596,14 +626,15 @@
     });
     //Zip code look up event
       document.getElementById('countyzip').addEventListener('input', function(event) {
-        const value = event.target.value.trim();
+        let value = event.target.value;
         const minLengthTerm = 4; // Example: Minimum length of 5 characters
-  
+   
         if (!/^[0-9]+$/.test(value) || value.length <= minLengthTerm || value.length >= 6) {
-         
+          //validate entered zipCode eg:non-numeric validation 
+          validateZipCode(value,event);
           return;
         }
-
+       
         // Make an AJAX request to your WordPress API//get the county informatin against a zip code
         fetch(apiUrl + '/api/ExternalEnhancement/GetCountyListByZipCode?zipcode=' + value,{
           headers: {
@@ -614,13 +645,14 @@
           .then(response => response.json())
           .then(data => {
             if (data != null && (data.length == 0 || data[0].countyName == "none")) {
-              // Handle case where data is empty or countyName is "none"
-              // Adjust the code to fit your requirements
-              console.log('No data or countyName is "none"');
+                
+                  showHideError(true,errorType.inValidZipCode);
+                  hideZipCodeAndAutoComplete();
+                 
             } else {
               const autocomplete = document.getElementById('autocomplete-list');
               const autocompleteList = document.getElementById('list-autocomplete');
-              
+              showHideError(false);
             if (data?.length > 0) {
               autocompleteList.innerHTML = ''; // Clear previous suggestions
                //creating option list for zip code response look up/ create auto complete list
@@ -651,7 +683,6 @@
             } else {
               autocompleteList.innerHTML = '';
               autocomplete.style.display = 'none';
-             // autocomplete.removeClass('show');
             }
             }
           })
@@ -681,7 +712,7 @@
         const county = document.getElementById('county').value;
          
         // Construct the data object for the API request
-        const data = {
+        const rquestdata = {
           "Household": {
             "people": ages.map((age,index) => ({ "dob": age, applicant_type : index==0? "Subscriber":"Dependent" })), // Assuming applicant_type is not collected
             "income":income==""?0:removeFormatting(income) ,
@@ -695,7 +726,11 @@
           },
           "PartnerCode": partnerCode
         };
-        sessionStorage.setItem('quoteData',JSON.stringify(data));
+        //check form field data validations
+        if(!isValidate(rquestdata)){
+          return;
+        }
+       
         this.showHideLoader(true);
 
         fetch(apiUrl + '/api/ExternalEnhancement/GetEstimatedAPTC',{
@@ -704,19 +739,21 @@
               'Authorization': basicAuth,
               'Content-Type': 'application/json' // Set content type if needed
           },
-          body: JSON.stringify(data)
+          body: JSON.stringify(rquestdata)
         })
           .then(response => response.json())
           .then(data => {
             this.showHideLoader(false);
             if(data.error){
-              alert(data.error);
+               // Handle errors
+            showHideError(true,data.error);
             }else{
+              showHideError(false);
               //aptc response will be the list of every individual 
               //every individual object has total aptc  field
              var aptc=parseFloat(data.estimates[0].aptc);
              //saving data in the session for subsidy or no subsidy screen 
-             var quoteData=JSON.parse(sessionStorage.getItem('quoteData'));
+             var quoteData=rquestdata;
              if(quoteData){
                 quoteData.Household.estimates=[];
                 quoteData.Household.estimates.push(data.estimates[0]);
@@ -746,8 +783,8 @@
             }
           }) .catch(error => {
             this.showHideLoader(false);
-      // Handle errors
-      alert('Error:'+ error);
+            // Handle errors
+            showHideError(true,error);
           });
       }
       //saving Quote information to jet and  redirecting to Jet plan screen
@@ -765,8 +802,9 @@
         .then(data => {
           
           if(data.error){
-            this.showHideLoader(false);
-            alert(data.error);
+            showHideLoader(false);
+            // Handle errors
+            showHideError(true,error);
           }else{
             //clear the quote information from session and rediret to jet plan screen
             //redirection url will be provided by api according to the enviroment UAT/PROD
@@ -774,9 +812,10 @@
             window.location.href=data.redirectUri;
           }
         }) .catch(error => {
-          this.showHideLoader(false);
-       // Handle errors
-       alert('Error:'+ error);
+          showHideLoader(false);
+          // Handle errors
+          showHideError(true,error);
+      
         });
     }
     //pre populated the current visible screen data against current screen type save in the session
@@ -817,6 +856,7 @@
           }
         });
         $('.subsidy-form').show();
+        document.getElementById('mainHeading').innerText=' Calculate your subsidy';
         document.getElementById('noestimates').style.display='none';
         document.getElementById('estimates').style.display='flex';
         document.getElementById('subsidy-amounts').classList.add('d-none');
@@ -852,6 +892,80 @@
     function back(){
       populateData(sessionStorage.getItem('prevScreenType'))
     }
-    </script>
+    //validate form submit data
+   function isValidate(data) {
+    if (data?.Place?.zipcode?.length > 5) {
+      showHideError(true,errorType.inValidZipCodeLength)
+      return false;
+    }else if((data?.Place?.zipcode?.length ==0 || !/^[0-9]+$/.test(data?.Place?.zipcode))){
+      showHideError(true,errorType.inValidZipCode);
+      return false;
+    }else if(!data?.Place?.county){
+      showHideError(true,errorType.invalidZipCodeCounty);
+      return false;
+    }else if(data?.Household?.income == 0 || !data?.Household?.income){
+      showHideError(true,errorType.invalidIncomeAmount);
+      return false;
+    }else if(data?.Household?.income?.length > 8){
+      showHideError(true,errorType.invalidIncomeLength);
+      return false;
+    } 
+    return true;
+  }
+  //show and hide the error 
+  //onlly show error  when isVisible =true 
+  function showHideError(isVisible,msg=''){
+    var element= document.getElementById('errorMsg');
+   
+    if(isVisible){
+          setTimeout(function() {
+            element.classList.add('show');
+            element.innerHTML="<strong>Error: </strong>"+msg;
+            element.style='transition: opacity 0.5s ease-in-out;'
+        }, 50); // You can adjust the delay time as needed
+       
+      
+    }else{
+      setTimeout(function() {
+        element.display='none';
+        element.classList?.remove('show');
+        element.innerHTML="<strong>Error: </strong>"+msg;
+        }, 50); // You can adjust the delay time as needed
+       
+    }
+  }
+  //hide the autocmplete options div when invalid zipcode
+  //Also remove the value from hidden field for submit form 
+  function hideZipCodeAndAutoComplete(){
+    const autocomplete = document.getElementById('autocomplete-list');
+    const autocompleteList = document.getElementById('list-autocomplete');
+
+    document.getElementById('fipsCode').value='';
+    document.getElementById('zipCodeValue').value='';
+    document.getElementById('state').value='';
+    document.getElementById('county').value='';
+
+    autocompleteList.innerHTML = ''; // Clear suggestions on selection
+    autocomplete.style.display = 'none'; // Hide autocomplete list
+  }
+  //validate enter zipcode 
+  function validateZipCode(value,event) {
+    if(value?.length>0 && !/^[0-9]+$/.test(value)){
+      const lastChar = value.charAt(value.length - 1);
+      if (!/^[0-9]+$/.test(lastChar)) {
+          // If the last character is alphabetic, remove it
+          event.target.value = event.target.value.slice(0, -1);
+          value = event.target.value ;
+      }
+    } 
+    else if( value.length >=5 ){
+      hideZipCodeAndAutoComplete()
+      showHideError(true,errorType.inValidZipCodeLength);
+    }
+    if( value?.length ==0 ){
+      hideZipCodeAndAutoComplete()
+    }
+}
+ </script>
   </body>
 </html>
