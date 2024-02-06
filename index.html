@@ -808,7 +808,11 @@
           }else{
             //clear the quote information from session and rediret to jet plan screen
             //redirection url will be provided by api according to the enviroment UAT/PROD
-            sessionStorage.clear();
+            setTimeout(() => {
+              showHideLoader(false);
+            }, 500);
+            
+            //sessionStorage.clear();
             window.location.href=data.redirectUri;
           }
         }) .catch(error => {
@@ -906,7 +910,7 @@
     }else if(data?.Household?.income == 0 || !data?.Household?.income){
       showHideError(true,errorType.invalidIncomeAmount);
       return false;
-    }else if(data?.Household?.income?.length > 8){
+    }else if(Math.floor(data?.Household?.income)?.toFixed(0).length > 8){
       showHideError(true,errorType.invalidIncomeLength);
       return false;
     } 
